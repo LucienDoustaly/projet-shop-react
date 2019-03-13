@@ -12,6 +12,7 @@ import GridListSimple from './components/GridListSimple';
 import Panier from './components/Panier';
 import ApercuStore from './components/ApercuStore';
 import Modifier from './components/Modifier'
+import Grid from '@material-ui/core/Grid';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
@@ -165,7 +166,7 @@ class App extends Component {
   };
 
   _valid = () => {
-  	this.props.shop_add_game({ state: this.state }); 
+  	this.props.shop_add_game({ state: this.state });
   	this._reset_state();
   };
 
@@ -189,44 +190,58 @@ class App extends Component {
 			          onChangeIndex={this.handleChange}
 			        >
 			          <div style={styles.slide} className="Inventaire">
-			            <div className="container">
-			            	<div className="container">
-								<div className="module">									
-									{
-										this.state.modifiedselected ? 
-											<div className="Modifier">
-												<h2 style={styles.headline}>Modifier</h2>
-												<Modifier state={this.state} onChangeText={this._set_update.bind(this)}/>
-												<FlatButton className="BoutonAnnuler" label="Annuler" 
-												onClick={() => {this._cancelmodifie()}}/>
-												<FlatButton className="BoutonConfirmer" label="Confirmer"
-												onClick={() => {this.props.shop_update_game({ index: this.state.indexselected, state: this.state}); this._cancelmodifie()}}/>
-											</div>
-										:
-											<div className="Formulaire">
-												<h2 style={styles.headline}>Ajouter un jeu au stock</h2>
-												<Form state={this.state} onChangeText={this._set_state.bind(this)}/>
-												<FlatButton className="BoutonValider" label="Valider" onClick={() => {this.state.prix > 0 ? this._valid() : alert("Veuillez entrer un prix")}}/>
-											</div>
-									}
-								</div>
-								<div className="module">
-									<Apercu titre={this.state.titreselected.length > 0 ? this.props.shop.items[this.state.indexselected].titre : this.state.titre}
-									        prix={this.state.prixselected > 0 ? this.props.shop.items[this.state.indexselected].prix : this.state.prix} 
-									        description={this.state.descriptionselected.length > 0 ? this.props.shop.items[this.state.indexselected].description : this.state.description} 
-									        image={this.state.imageselected.length > 0 ? this.props.shop.items[this.state.indexselected].image : this.state.image}
-									        quantity={this.state.indexselected >= 0 ? this.props.shop.items[this.state.indexselected].quantity : -1}
-									        index={this.state.indexselected}
-									        onClickModifie={this._modifie.bind(this)}
-									        onClickAjouter={this.props.shop_increment_game.bind(this)}
-									        onClickRetirer={this.props.shop_decrement_game.bind(this)}
-									        onClickSupprimer={this._delete.bind(this)}/>
-								</div>
-							</div>
-							<div className="module">
-								<GridListSimple payload={this.props.shop.items} onClickButton={this._select.bind(this)}/>
-							</div>
-			            </div>
+                  <Grid container spacing={16}>
+                    <Grid item xs={4}>
+                    <Grid
+                      container
+                      spacing={16}
+                      direction="column"
+                      justify="center"
+                      alignItems="center"
+                      >
+                        <Grid item xs={9}>
+                        <div className="module">
+                          <Apercu titre={this.state.titreselected.length > 0 ? this.props.shop.items[this.state.indexselected].titre : this.state.titre}
+                                  prix={this.state.prixselected > 0 ? this.props.shop.items[this.state.indexselected].prix : this.state.prix}
+                                  description={this.state.descriptionselected.length > 0 ? this.props.shop.items[this.state.indexselected].description : this.state.description}
+                                  image={this.state.imageselected.length > 0 ? this.props.shop.items[this.state.indexselected].image : this.state.image}
+                                  quantity={this.state.indexselected >= 0 ? this.props.shop.items[this.state.indexselected].quantity : -1}
+                                  index={this.state.indexselected}
+                                  onClickModifie={this._modifie.bind(this)}
+                                  onClickAjouter={this.props.shop_increment_game.bind(this)}
+                                  onClickRetirer={this.props.shop_decrement_game.bind(this)}
+                                  onClickSupprimer={this._delete.bind(this)}/>
+                        </div>
+                        </Grid>
+                        <Grid item xs={5}>
+                        <div className="module">
+                          {
+                            this.state.modifiedselected ?
+                              <div className="Modifier">
+                                <h2 style={styles.headline}>Modifier</h2>
+                                <Modifier state={this.state} onChangeText={this._set_update.bind(this)}/>
+                                <FlatButton className="BoutonAnnuler" label="Annuler"
+                                onClick={() => {this._cancelmodifie()}}/>
+                                <FlatButton className="BoutonConfirmer" label="Confirmer"
+                                onClick={() => {this.props.shop_update_game({ index: this.state.indexselected, state: this.state}); this._cancelmodifie()}}/>
+                              </div>
+                            :
+                              <div className="Formulaire">
+                                <h2 style={styles.headline}>Ajouter un jeu au stock</h2>
+                                <Form state={this.state} onChangeText={this._set_state.bind(this)}/>
+                                <FlatButton className="BoutonValider" label="Valider" onClick={() => {this.state.prix > 0 ? this._valid() : alert("Veuillez entrer un prix")}}/>
+                              </div>
+                          }
+                        </div>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={8}>
+                    <div className="module">
+                      <GridListSimple payload={this.props.shop.items} onClickButton={this._select.bind(this)}/>
+                    </div>
+                    </Grid>
+                  </Grid>
 			          </div>
 			          <div style={styles.slide} className="Store">
 			            <div>
@@ -239,10 +254,10 @@ class App extends Component {
 											onClick={() => {this.props.panier_vider_game()}}/>
 							<br/><br/>
 			          	</div>
-			            <Panier payload={this.props.panier} 
-					            onClickRetirerPanier={this.props.panier_delete_game.bind(this)} 
+			            <Panier payload={this.props.panier}
+					            onClickRetirerPanier={this.props.panier_delete_game.bind(this)}
 					            onClickIncrementPanier={this.props.panier_increment_game.bind(this)}
-					            onClickDecrementPanier={this.props.panier_decrement_game.bind(this)}/>
+					            onClickDecrementStore={this.props.panier_decrement_game.bind(this)}/>
 			          </div>
 			        </SwipeableViews>
 			      </div>

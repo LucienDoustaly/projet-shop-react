@@ -2,14 +2,7 @@ import * as types from "./constants";
 
 
 const initialState = {
-	items: [{
-			id: Date.now(),
-			titre:"Assassin's Creed",
-	      	prix: 99,
-	      	description: "Sorti en 2017",
-	      	image: "https://ubistatic19-a.akamaihd.net/resource/fr-fr/game/assassins-creed/ac-origins/ac_news_announce-keyartt-thumb-ncsa_292590.jpg",
-	      	quantity: 0,
-		},
+	items: [
 		{
 			id: Date.now()+1,
 			titre:"Need For Speed PayBack",
@@ -232,4 +225,3 @@ export default function reducer(state = initialState, action)
 
 	}
 };
-
